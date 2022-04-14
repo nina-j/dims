@@ -1,0 +1,16 @@
+name: test
+
+on:
+  pull_request:
+    branches: [main]
+
+
+jobs:
+  tests:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+    - name: Build image
+      run: docker-compose build
+    - name: Run pytest
+      run: docker-compose run dims pytest --cov=dims/ --cov-fail-under=100
