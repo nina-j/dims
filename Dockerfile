@@ -6,7 +6,7 @@ ENV PYTHONUNBUFFERED=1 \
     POETRY_VIRTUALENVS_CREATE=false
 
 
-RUN pip3 install --no-cache-dir poetry==${POETRY_VERSION}
+RUN pip3 install poetry==${POETRY_VERSION} --quiet --no-cache-dir
 WORKDIR /code
 COPY . .
 RUN poetry install --no-interaction
