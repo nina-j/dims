@@ -7,6 +7,9 @@ license = "Unlicense"
 
 [tool.poetry.dependencies]
 python = "^3.10"
+google-cloud-storage = "^2.3.0"
+pydantic = "^1.9.0"
+structlog = "^21.5.0"
 
 [tool.poetry.dev-dependencies]
 pytest = "^7.1.1"
@@ -14,6 +17,7 @@ mypy = "^0.942"
 flake8 = "^4.0.1"
 black = "^22.3.0"
 pytest-cov = "^3.0.0"
+hypothesis = "^6.43.1"
 
 [build-system]
 requires = ["poetry-core>=1.0.0"]
