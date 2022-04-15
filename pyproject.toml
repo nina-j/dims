@@ -29,3 +29,8 @@ ignore_errors = true
 module = "dims.*"
 disallow_untyped_defs = true
 ignore_errors = false
+
+[tool.commitizen]
+name = "cz_conventional_commits"
+version = "0.1.0"
+version_files = ["dims/__init__.py", "pyproject.toml:version"]
