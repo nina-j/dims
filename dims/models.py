@@ -2,10 +2,13 @@
 # --------------------------------------------------------------------------------------
 # Imports
 # --------------------------------------------------------------------------------------
+import re
+from datetime import datetime
 from uuid import UUID
 
 from pydantic import BaseModel
 from pydantic import Field
+from pydantic import validator
 
 # --------------------------------------------------------------------------------------
 # Data models
@@ -18,9 +21,24 @@ class CraftBase(BaseModel):
     class Config:
         allow_population_by_field_name: bool = True
         extra = "forbid"
+        json_encoders = {datetime: lambda dt: dt.strftime("%Y-%m-%d %H:%M:%S")}
 
     id: UUID
     size: str
+    timestamp: datetime
+
+    @validator("timestamp", pre=True)
+    def timestamp_from_string(cls, string: str) -> datetime:
+        """Extract timestamp from a string on the form .*yyyyMMdd_HHmmss.
+
+        Args:
+            string (str): String to extract timestamp from.
+
+        Returns:
+            datetime: Parsed timestamp as a datetime.
+        """
+        timestamp = "".join(re.findall(r"\d{8}_\d{6}$", string))
+        return datetime.strptime(timestamp, "%Y%m%d_%H%M%S")
 
 
 class LanderSaturn(CraftBase):
