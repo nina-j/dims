@@ -4,6 +4,8 @@
 # --------------------------------------------------------------------------------------
 import re
 from datetime import datetime
+from typing import Literal
+from typing import Optional
 from uuid import UUID
 
 from pydantic import BaseModel
@@ -24,7 +26,9 @@ class CraftBase(BaseModel):
         json_encoders = {datetime: lambda dt: dt.strftime("%Y-%m-%d %H:%M:%S")}
 
     id: str
-    size: str
+    magnitude: Literal["massive", "big", "medium", "small", "tiny"] | None = Field(
+        alias="size"
+    )
     timestamp: datetime
 
     @validator("timestamp", pre=True)
@@ -56,6 +60,35 @@ class CraftBase(BaseModel):
             uuid_ = UUID(uuid_)
         # UUID.fields gives integer values - hex format them.
         return f"{uuid_.fields[2]:x}"
+
+    @validator("magnitude", pre=True)
+    def size_to_magnitude(cls, size: str) -> Optional[str]:
+        """Parse a size string into a magnitude.
+
+        Args:
+            size (str): The size to parse.
+
+        Returns:
+            Optional[str]: Magnitude matched on size, or None if not applicable.
+        """
+        try:
+            size_int = int(size)
+        except ValueError:
+            return None
+
+        match size_int:
+            case x if 500 <= x < 1000:
+                return "massive"
+            case x if 100 <= x < 500:
+                return "big"
+            case x if 50 <= x < 100:
+                return "small"
+            case x if 1 <= x < 50:
+                return "tiny"
+
+        # We should be able to just match the wildcard case _
+        # and return None, but mypy doesn't understand it. >:(
+        return None
 
 
 class LanderSaturn(CraftBase):

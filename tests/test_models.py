@@ -69,6 +69,25 @@ def test_base_model_id(model_data, uuid_: str, id_: str) -> None:
     assert CraftBase(**model_data).id == id_
 
 
+size_params = [
+    ("2000", None),
+    ("859", "massive"),
+    ("347", "big"),
+    ("68", "small"),
+    ("20", "tiny"),
+    ("-1", None),
+    ("SPACE!", None),
+]
+
+
+@given(model_data=base_strat())
+@pytest.mark.parametrize(["size", "magnitude"], size_params)
+def test_base_model_magnitude(model_data: dict[str, Any], size, magnitude) -> None:
+    """Test that we parse size into magnitude correctly."""
+    model_data["size"] = size
+    assert CraftBase(**model_data).magnitude == magnitude
+
+
 @st.composite
 def craft_strats(
     draw: st.DrawFn, craft: dict[str, st.SearchStrategy]
