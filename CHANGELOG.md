@@ -1,3 +1,9 @@
+## 0.5.0 (2022-04-17)
+
+### Feat
+
+- **transform**: Parse ID of length 4 from UUID
+
 ## 0.4.1 (2022-04-17)
 
 ### Fix
