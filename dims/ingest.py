@@ -5,8 +5,6 @@
 import csv
 from collections.abc import Iterator
 from io import StringIO
-from typing import Any
-from typing import NamedTuple
 
 from google.cloud import storage
 
@@ -15,13 +13,6 @@ from .config import logger
 # --------------------------------------------------------------------------------------
 # Code
 # --------------------------------------------------------------------------------------
-
-
-class BlobData(NamedTuple):
-    """Collection of BlobData."""
-
-    name: str
-    data: list[dict[str, Any]]
 
 
 def get_blobs(
@@ -41,21 +32,24 @@ def get_blobs(
     return client.list_blobs(bucket_name, max_results)
 
 
-def get_blob_data(blob: storage.Blob) -> BlobData:
+def get_blob_data(blob: storage.Blob) -> list[dict[str, str]]:
     """Get csv file names and data in dictionary format from a given blob.
 
     Args:
         blob (storage.Blob): The blob to download data from.
 
     Returns:
-        BlobData: A NamedTuple containing the blob name and a list of dictionary data.
+        list[dict[str, str]]: A list containing a dictionary representation of csv data.
     """
     raw_data = blob.download_as_bytes()
-
     try:
-        blob_data = list(csv.DictReader(StringIO(raw_data.decode())))
+        csv_data: list[dict[str, str]] = list(
+            csv.DictReader(StringIO(raw_data.decode()))
+        )
     except csv.Error as e:
         logger().error("Failed to parse blob data", error=str(e))
-        blob_data = []
-
-    return BlobData(blob.name, blob_data)
+        return []
+    else:
+        for data in csv_data:
+            data.setdefault("timestamp", blob.name)
+    return csv_data
