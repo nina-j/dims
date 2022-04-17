@@ -1,3 +1,9 @@
+## 0.6.0 (2022-04-17)
+
+### Feat
+
+- **transform**: Parse size to magnitude
+
 ## 0.5.0 (2022-04-17)
 
 ### Feat
