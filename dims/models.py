@@ -5,7 +5,6 @@
 import re
 from datetime import datetime
 from typing import Literal
-from typing import Optional
 from uuid import UUID
 
 from pydantic import BaseModel
@@ -26,7 +25,7 @@ class CraftBase(BaseModel):
         json_encoders = {datetime: lambda dt: dt.strftime("%Y-%m-%d %H:%M:%S")}
 
     id: str
-    magnitude: Literal["massive", "big", "medium", "small", "tiny"] | None = Field(
+    magnitude: Literal["massive", "big", "medium", "small", "tiny", "N/A"] = Field(
         alias="size"
     )
     timestamp: datetime
@@ -62,19 +61,22 @@ class CraftBase(BaseModel):
         return f"{uuid_.fields[2]:x}"
 
     @validator("magnitude", pre=True)
-    def size_to_magnitude(cls, size: str) -> Optional[str]:
+    def size_to_magnitude(
+        cls, size: str
+    ) -> Literal["massive", "big", "medium", "small", "tiny", "N/A"]:
         """Parse a size string into a magnitude.
 
         Args:
             size (str): The size to parse.
 
         Returns:
-            Optional[str]: Magnitude matched on size, or None if not applicable.
+            Literal["massive", "big", "medium", "small", "tiny", "N/A"]:
+                Magnitude matched on size.
         """
         try:
             size_int = int(size)
         except ValueError:
-            return None
+            return "N/A"
 
         match size_int:
             case x if 500 <= x < 1000:
@@ -87,8 +89,8 @@ class CraftBase(BaseModel):
                 return "tiny"
 
         # We should be able to just match the wildcard case _
-        # and return None, but mypy doesn't understand it. >:(
-        return None
+        # and return "N/A", but mypy doesn't understand it. >:(
+        return "N/A"
 
 
 class LanderSaturn(CraftBase):
