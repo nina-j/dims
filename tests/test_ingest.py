@@ -71,13 +71,13 @@ def test_get_blob_data(csv, blob_name):
         blob = storage.Blob(blob_name, "test_bucket")
         with capture_logs() as log_output:
             blob_data = get_blob_data(blob)
-            assert blob_data.name == blob_name
             error = {
                 "error": "line contains NUL",
                 "event": "Failed to parse blob data",
                 "log_level": "error",
             }
             if error in log_output:
-                assert blob_data.data == []
+                assert blob_data == []
             else:
-                assert blob_data.data
+                assert blob_data
+                assert "timestamp" in blob_data[0].keys()
