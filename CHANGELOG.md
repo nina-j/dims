@@ -1,3 +1,14 @@
+## 0.7.0 (2022-04-17)
+
+### Feat
+
+- **output**: Add csv writer
+
+### Refactor
+
+- Return N/A instead of None for magnitude
+- Change output of blob_data function to list of dicts
+
 ## 0.6.0 (2022-04-17)
 
 ### Feat
