@@ -70,13 +70,13 @@ def test_base_model_id(model_data, uuid_: str, id_: str) -> None:
 
 
 size_params = [
-    ("2000", None),
+    ("2000", "N/A"),
     ("859", "massive"),
     ("347", "big"),
     ("68", "small"),
     ("20", "tiny"),
-    ("-1", None),
-    ("SPACE!", None),
+    ("-1", "N/A"),
+    ("SPACE!", "N/A"),
 ]
 
 
