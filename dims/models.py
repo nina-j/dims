@@ -13,6 +13,8 @@ from pydantic import Field
 
 
 class CraftBase(BaseModel):
+    """Base craft data model."""
+
     class Config:
         allow_population_by_field_name: bool = True
         extra = "forbid"
@@ -22,6 +24,8 @@ class CraftBase(BaseModel):
 
 
 class LanderSaturn(CraftBase):
+    """Saturn lander data model."""
+
     core: float
     speed: float = Field(alias="SPEED")
     force: float
@@ -29,6 +33,8 @@ class LanderSaturn(CraftBase):
 
 
 class LanderVenus(CraftBase):
+    """Venus lander data model."""
+
     core: float = Field(alias="coRe")
     suspension: float
     thrust: float
@@ -37,6 +43,8 @@ class LanderVenus(CraftBase):
 
 
 class RocketSaturn(CraftBase):
+    """Saturn rocket data model."""
+
     mass: float = Field(alias="Mass")
     gravity: float
     temperature: float
@@ -44,5 +52,7 @@ class RocketSaturn(CraftBase):
 
 
 class RocketVenus(CraftBase):
+    """Venus rocket data model."""
+
     speed: float
     axis_angle: float = Field(alias="axis_ANGLE")
