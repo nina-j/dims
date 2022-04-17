@@ -7,6 +7,7 @@ from typing import Any
 import pytest
 from hypothesis import given
 from hypothesis import strategies as st
+from pydantic import ValidationError
 
 from dims.models import CraftBase
 from dims.models import LanderSaturn
@@ -20,9 +21,21 @@ from dims.models import RocketVenus
 
 
 def base_strat() -> st.SearchStrategy:
-    """Strategy for generating CraftBase dictionary data."""
+    """Strategy for generating CraftBase dictionary data.
+
+    Hypothesis will generate weird datetimes including e.g. year 45.
+    %Y in the date formatting string does *not* zero pad centuries,
+    in contrast to what we might expect when reading the documentation.
+    We filter out early years instead.
+    """
     size_strat = st.one_of(st.text(), st.integers().map(str))
-    required = {"id": st.uuids(), "size": size_strat}
+    timestamp = (
+        st.datetimes()
+        .filter(lambda dt: dt.year >= 1000)
+        .map(lambda dt: dt.strftime(f"{st.text()}_%Y%m%d_%H%M%S"))
+        # Timestamp becomes a random string with _yyyyMMdd_HHmmss prepended
+    )
+    required = {"id": st.uuids(), "size": size_strat, "timestamp": timestamp}
     return st.fixed_dictionaries(required)
 
 
@@ -30,6 +43,14 @@ def base_strat() -> st.SearchStrategy:
 def test_base_model(model_data: dict[str, str]) -> None:
     """Test that we can parse data to the CraftBase model."""
     assert CraftBase(**model_data)
+
+
+@given(timestamp=st.datetimes().map(str), model_data=base_strat())
+def test_base_model_validators(timestamp: str, model_data: dict[str, Any]) -> None:
+    """Test that the validator fails when given wrong timestamps."""
+    with pytest.raises(ValidationError):
+        model_data["timestamp"] = timestamp
+        CraftBase(**model_data)
 
 
 @st.composite
