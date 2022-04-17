@@ -1,3 +1,9 @@
+## 0.4.0 (2022-04-17)
+
+### Feat
+
+- **transform**: Add timestamp and extraction validator to CraftBase
+
 ## 0.3.1 (2022-04-17)
 
 ### Fix
