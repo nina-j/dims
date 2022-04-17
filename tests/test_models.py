@@ -32,8 +32,7 @@ def base_strat() -> st.SearchStrategy:
     timestamp = (
         st.datetimes()
         .filter(lambda dt: dt.year >= 1000)
-        .map(lambda dt: dt.strftime(f"{st.text()}_%Y%m%d_%H%M%S"))
-        # Timestamp becomes a random string with _yyyyMMdd_HHmmss prepended
+        .map(lambda dt: dt.strftime("filename_%Y%m%d_%H%M%S"))
     )
     required = {"id": st.uuids(), "size": size_strat, "timestamp": timestamp}
     return st.fixed_dictionaries(required)
