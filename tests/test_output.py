@@ -3,10 +3,12 @@
 # Imports
 # --------------------------------------------------------------------------------------
 from csv import DictReader
+from pathlib import Path
 
 import pytest
 from hypothesis import given
 from hypothesis import strategies as st
+from structlog.testing import capture_logs
 
 from .test_models import craft_params
 from .test_models import craft_strats
@@ -41,3 +43,11 @@ def test_crafts_to_csv(model, craft, strat_data, temp_dir) -> None:
     for craft, data in zip(crafts, from_csv):
         # CSV data is always all strings, all the time.
         assert list(map(str, craft.dict().values())) == list(data.values())
+
+
+def test_crafts_to_csv_empty(temp_dir):
+    test_file = temp_dir / "test.csv"
+    with capture_logs() as log_output:
+        crafts_to_csv([], test_file)
+        assert not Path(test_file).is_file()
+        assert {"event": "No data to output", "log_level": "warning"} in log_output
