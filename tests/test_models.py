@@ -34,7 +34,7 @@ def base_strat() -> st.SearchStrategy:
         .filter(lambda dt: dt.year >= 1000)
         .map(lambda dt: dt.strftime("filename_%Y%m%d_%H%M%S"))
     )
-    required = {"id": st.uuids(), "size": size_strat, "timestamp": timestamp}
+    required = {"id": st.uuids().map(str), "size": size_strat, "timestamp": timestamp}
     return st.fixed_dictionaries(required)
 
 
@@ -45,11 +45,28 @@ def test_base_model(model_data: dict[str, str]) -> None:
 
 
 @given(timestamp=st.datetimes().map(str), model_data=base_strat())
-def test_base_model_validators(timestamp: str, model_data: dict[str, Any]) -> None:
+def test_base_model_timestamp(timestamp: str, model_data: dict[str, Any]) -> None:
     """Test that the validator fails when given wrong timestamps."""
     with pytest.raises(ValidationError):
         model_data["timestamp"] = timestamp
         CraftBase(**model_data)
+
+
+uuid_params = [
+    ("bf8d460f-943c-4084-835c-a03dde141041", "4084"),
+    ("f0388371-7285-449c-be70-277db541ac86", "449c"),
+    ("4b8a43ec-4771-4459-9c27-baf41ae4ee45", "4459"),
+    ("fe1b0f3a-2aff-4195-9af2-3ac627ac0331", "4195"),
+    ("a40a94b4-cc8c-4ad3-adea-e335de792d98", "4ad3"),
+]
+
+
+@given(model_data=base_strat())
+@pytest.mark.parametrize(["uuid_", "id_"], uuid_params)
+def test_base_model_id(model_data, uuid_: str, id_: str) -> None:
+    """Test that we parse UUIDs correctly into IDs of length 4."""
+    model_data["id"] = uuid_
+    assert CraftBase(**model_data).id == id_
 
 
 @st.composite

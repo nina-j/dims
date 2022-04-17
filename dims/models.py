@@ -23,7 +23,7 @@ class CraftBase(BaseModel):
         extra = "forbid"
         json_encoders = {datetime: lambda dt: dt.strftime("%Y-%m-%d %H:%M:%S")}
 
-    id: UUID
+    id: str
     size: str
     timestamp: datetime
 
@@ -39,6 +39,23 @@ class CraftBase(BaseModel):
         """
         timestamp = "".join(re.findall(r"\d{8}_\d{6}$", string))
         return datetime.strptime(timestamp, "%Y%m%d_%H%M%S")
+
+    @validator("id", pre=True)
+    def id_from_uuid(cls, uuid_: UUID | str) -> str:
+        """Parse an UUID into an ID using the middle value.
+
+        For example: f0388371-7285-449c-be70-277db541ac86 -> 449c
+
+        Args:
+            uuid_ (UUID | str): The incoming UUID to parse.
+
+        Returns:
+            str: A string of length 4 corresponding to the middle value.
+        """
+        if isinstance(uuid_, str):
+            uuid_ = UUID(uuid_)
+        # UUID.fields gives integer values - hex format them.
+        return f"{uuid_.fields[2]:x}"
 
 
 class LanderSaturn(CraftBase):
