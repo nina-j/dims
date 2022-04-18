@@ -5,6 +5,8 @@
 import csv
 from pathlib import Path
 
+from tqdm import tqdm
+
 from .models import CraftBase
 from dims.config import logger
 
@@ -28,4 +30,5 @@ def crafts_to_csv(models: list[CraftBase], out_file: Path) -> None:
     with out_file.open("w") as f:
         writer = csv.DictWriter(f, fieldnames=fieldnames, escapechar="\n")
         writer.writeheader()
-        writer.writerows([model.dict() for model in models])
+        for model in tqdm(models, desc=f"Outputting {out_file}"):
+            writer.writerow(model.dict())
