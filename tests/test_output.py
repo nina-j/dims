@@ -3,7 +3,6 @@
 # Imports
 # --------------------------------------------------------------------------------------
 from csv import DictReader
-from pathlib import Path
 
 import pytest
 from hypothesis import given
@@ -17,11 +16,6 @@ from dims.output import crafts_to_csv
 # --------------------------------------------------------------------------------------
 # Code
 # --------------------------------------------------------------------------------------
-
-
-@pytest.fixture(scope="class")
-def temp_dir(tmpdir_factory):
-    yield tmpdir_factory.mktemp("test")
 
 
 @pytest.mark.parametrize(["model", "craft"], craft_params)
@@ -49,5 +43,4 @@ def test_crafts_to_csv_empty(temp_dir):
     test_file = temp_dir / "test.csv"
     with capture_logs() as log_output:
         crafts_to_csv([], test_file)
-        assert not Path(test_file).is_file()
         assert {"event": "No data to output", "log_level": "warning"} in log_output
