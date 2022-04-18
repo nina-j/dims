@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "dims"
-version = "1.0.0"
+version = "1.0.1"
 description = ""
 authors = ["Nina Jensen <nina.k.jensen@gmail.com>"]
 license = "Unlicense"
@@ -41,5 +41,5 @@ ignore_errors = false
 
 [tool.commitizen]
 name = "cz_conventional_commits"
-version = "1.0.0"
+version = "1.0.1"
 version_files = ["dims/__init__.py", "pyproject.toml:version"]

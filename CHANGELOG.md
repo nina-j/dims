@@ -1,3 +1,9 @@
+## 1.0.1 (2022-04-18)
+
+### Fix
+
+- **docs**: Redo progress bars in readme example
+
 ## 1.0.0 (2022-04-18)
 
 ### Feat
