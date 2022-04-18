@@ -3,6 +3,8 @@
 # Imports
 # --------------------------------------------------------------------------------------
 from functools import lru_cache
+from pathlib import Path
+from typing import Optional
 
 import structlog
 from pydantic import BaseSettings
@@ -16,6 +18,8 @@ class Settings(BaseSettings):
     """Settings via environment variables for use throughout the project."""
 
     bucket: str = "de-assignment-data-bucket"
+    output_dir: Path = Path.cwd() / "data"
+    max_results: Optional[int] = None
 
 
 @lru_cache(maxsize=32)

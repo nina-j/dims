@@ -8,5 +8,6 @@ ENV PYTHONUNBUFFERED=1 \
 
 RUN pip3 install poetry==${POETRY_VERSION} --quiet --no-cache-dir
 WORKDIR /code
+RUN mkdir data
 COPY . .
 RUN poetry install --no-interaction
