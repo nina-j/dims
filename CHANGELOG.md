@@ -1,3 +1,19 @@
+## 1.0.0 (2022-04-18)
+
+### Feat
+
+- Add dims main entry point
+- Add output directory and max results to settings
+- Add tqdm progress bar to output function
+
+### Refactor
+
+- Bring back BlobData named tuple
+
+### Fix
+
+- Rework timestamp validation & LanderVenus alias
+
 ## 0.7.0 (2022-04-17)
 
 ### Feat
