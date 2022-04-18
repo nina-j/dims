@@ -11,3 +11,5 @@ WORKDIR /code
 RUN mkdir data
 COPY . .
 RUN poetry install --no-interaction
+
+CMD ["dims"]
