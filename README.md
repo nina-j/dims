@@ -31,9 +31,9 @@ Changing the output directory might be useful if running DIMS locally. `max_resu
 
 ```fish
 docker-compose run -e MAX_RESULTS=5 dims
-> Downloading data: 100%|█████████████████████████████████████████████████████████| 5/5 [00:00<00:00, 49.08it/s]
-> Parsing data: 100%|█████████████████████████████████████████████████████████████| 5/5 [00:00<00:00, 28.49it/s]
-> Outputting /code/data/LanderSaturn.csv: 100%|███████████████████████████████████| 5000/5000 [00:00<00:00, 98853.25it/s]
+> Downloading data: 100%|████████████████████████████████████████████████| 5/5 [00:00<00:00, 49.08it/s]
+> Parsing data: 100%|████████████████████████████████████████████████████| 5/5 [00:00<00:00, 28.49it/s]
+> Outputting /code/data/LanderSaturn.csv: 100%|██████████████████████████| 5000/5000 [00:00<00:00, 98853.25it/s]
 ```
 
 ## Tests
