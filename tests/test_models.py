@@ -114,7 +114,7 @@ craft_params = [
     (
         LanderVenus,
         {
-            "coRe": st.floats(),
+            "coRE": st.floats(),
             "suspension": st.floats(),
             "thrust": st.floats(),
             "weight": st.floats(),

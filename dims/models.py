@@ -40,7 +40,7 @@ class CraftBase(BaseModel):
         Returns:
             datetime: Parsed timestamp as a datetime.
         """
-        timestamp = "".join(re.findall(r"\d{8}_\d{6}$", string))
+        timestamp = "".join(re.findall(r"\d{8}_\d{6}", string))
         return datetime.strptime(timestamp, "%Y%m%d_%H%M%S")
 
     @validator("id", pre=True)
@@ -105,7 +105,7 @@ class LanderSaturn(CraftBase):
 class LanderVenus(CraftBase):
     """Venus lander data model."""
 
-    core: float = Field(alias="coRe")
+    core: float = Field(alias="coRE")
     suspension: float
     thrust: float
     weight: float
