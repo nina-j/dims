@@ -77,7 +77,7 @@ def test_get_blob_data(csv, blob_name):
                 "log_level": "error",
             }
             if error in log_output:
-                assert blob_data == []
+                assert blob_data.data == []
             else:
-                assert blob_data
-                assert "timestamp" in blob_data[0].keys()
+                assert blob_data.data
+                assert "timestamp" in blob_data.data[0].keys()
